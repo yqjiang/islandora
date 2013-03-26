@@ -204,7 +204,7 @@ function islandora_preprocess_islandora_objects(array &$variables) {
     return $o + array(
       'class' => drupal_strtolower(preg_replace('/[^A-Za-z0-9]/', '-', $o->id)),
       'link' => l($o->label, $url, $link_options),
-      'image' => l($img, $url, $link_options)),
+      'image' => l($img, $url, $link_options),
       'DC' => $dc->asArray(),
     );
   };
