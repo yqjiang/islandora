@@ -163,7 +163,6 @@ function theme_islandora_object_print(array &$variables) {
  */
 function islandora_preprocess_islandora_objects(array &$variables) {
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
-  $object = $variables['object'];
   $display = (empty($_GET['display'])) ? 'grid' : $_GET['display'];
   $grid_display = $display == 'grid';
   $list_display = !$grid_display;
@@ -171,7 +170,7 @@ function islandora_preprocess_islandora_objects(array &$variables) {
   $variables['display_links'] = array(
     array(
       'title' => t('Grid view'),
-      'href' => url("islandora/object/{$object->id}/pages", array('absolute' => TRUE)),
+      'href' => url($_GET['q'], array('absolute' => TRUE)),
       'attributes' => array(
         'class' => $grid_display ? 'active' : '',
       ),
@@ -179,7 +178,7 @@ function islandora_preprocess_islandora_objects(array &$variables) {
     ),
     array(
       'title' => t('List view'),
-      'href' => url("islandora/object/{$object->id}/pages", array('absolute' => TRUE)),
+      'href' => url($_GET['q'], array('absolute' => TRUE)),
       'attributes' => array(
         'class' => $list_display ? 'active' : '',
       ),
