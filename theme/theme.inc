@@ -157,3 +157,60 @@ function islandora_preprocess_islandora_object_print(array &$variables) {
 function theme_islandora_object_print(array &$variables) {
   return drupal_render($variables['content']);
 }
+
+/**
+ * Implements hook_preprocess_theme().
+ */
+function islandora_preprocess_islandora_objects(array &$variables) {
+  module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
+  $object = $variables['object'];
+  $display = (empty($_GET['display'])) ? 'grid' : $_GET['display'];
+  $grid_display = $display == 'grid';
+  $list_display = !$grid_display;
+  $query_params = drupal_get_query_parameters($_GET);
+  $variables['display_links'] = array(
+    array(
+      'title' => t('Grid view'),
+      'href' => url("islandora/object/{$object->id}/pages", array('absolute' => TRUE)),
+      'attributes' => array(
+        'class' => $grid_display ? 'active' : '',
+      ),
+      'query' => $query_params + array('display' => 'grid'),
+    ),
+    array(
+      'title' => t('List view'),
+      'href' => url("islandora/object/{$object->id}/pages", array('absolute' => TRUE)),
+      'attributes' => array(
+        'class' => $list_display ? 'active' : '',
+      ),
+      'query' => $query_params + array('display' => 'list'),
+    ),
+  );
+  // Pager.
+  $objects = $variables['objects'];
+  $limit = $variables['limit'];
+  $page_size = $variables['page_size'];
+  $total_count = count($pages);
+  $page = pager_default_initialize(count($objects), $limit);
+  $objects = array_slice($results, $page * $limit, $limit);
+  $variables['pager'] = theme('pager', array('quantity' => 10));
+  // Content.
+  $map_objects = function($o) {
+    $o = islandora_object_load($o);
+    $url = "islandora/object/{$o->id}";
+    $link_options = array('html' => TRUE, 'attributes' => array('title' => $o->label));
+    $img = theme_image(array('path' => url("$url/datastream/TN/view"), 'attributes' => array()));
+    $dc = DublinCore::importFromXMLString($o['DC']->content);
+    return $o + array(
+      'class' => drupal_strtolower(preg_replace('/[^A-Za-z0-9]/', '-', $o->id)),
+      'link' => l($o->label, $url, $link_options),
+      'image' => l($img, $url, $link_options)),
+      'DC' => $dc->asArray(),
+    );
+  };
+  $objects = array_map($map_objects, $objects);
+  $theme = $grid_display ? 'islandora_objects_grid' : 'islandora_objects_list';
+  $variables['content'] = theme($theme, array('objects' => $objects));
+  /*$module_path = drupal_get_path('module', 'islandora');
+    drupal_add_css("$module_path/css/islandora_objects.css");*/
+}
