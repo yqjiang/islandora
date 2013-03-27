@@ -7,9 +7,11 @@
 ?>
 <div class="islandora-objects-grid clearfix">
  <?php foreach($objects as $object): ?>
-  <dl class="islandora-object <?php print $object['class']; ?>">
-   <dt class="islandora-object-thumb"><?php print $object['thumb']; ?></dt>
-   <dd class="islandora-object-caption"><?php print $object['title']; ?></dd>
-  </dl>
+   <div class="islandora-objects-grid-item clearfix">
+     <dl class="islandora-object <?php print $object['class']; ?>">
+       <dt class="islandora-object-thumb"><?php print $object['thumb']; ?></dt>
+       <dd class="islandora-object-caption"><?php print $object['link']; ?></dd>
+     </dl>
+   </div>
  <?php endforeach; ?>
 </div>

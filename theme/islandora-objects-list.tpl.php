@@ -9,21 +9,19 @@
   <?php $row_field = 0; ?>
   <?php foreach($objects as $object): ?>
     <?php $first = ($row_field == 0) ? 'first' : ''; ?>
-    <div class="islandora-object-list-item clearfix">
-      <dl class="<?php print $object['class']; ?>">
-        <dt>
-          <?php print $object['image']; ?>
+    <div class="islandora-objects-list-item clearfix">
+      <dl class="islandora-object <?php print $object['class']; ?>">
+        <dt class="islandora-object-thumb">
+          <?php print $object['thumb']; ?>
         </dt>
-        <dd class="islandora-object <?php print $object['class']; print $first; ?>">
+        <dd class="islandora-object-caption <?php print $object['class']?> <?php print $first; ?>">
           <strong>
             <?php print $object['link']; ?>
           </strong>
         </dd>
-        <?php if (isset($object['DC']['dc:description']['value'])): ?>
-          <dd class="<?php print $object['DC']['dc:description']['class']; ?>">
-            <?php print $object['DC']['dc:description']['value']; ?>
-          </dd>
-        <?php endif; ?>
+        <dd class="islandora-object-description">
+          <?php print $object['description']; ?>
+        </dd>
       </dl>
     </div>
     <?php $row_field++; ?>
