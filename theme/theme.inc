@@ -198,14 +198,18 @@ function islandora_preprocess_islandora_objects(array &$variables) {
     $url = "islandora/object/{$o->id}";
     $link_options = array('html' => TRUE, 'attributes' => array('title' => $o->label));
     $img = theme_image(array('path' => url("$url/datastream/TN/view"), 'attributes' => array()));
+    $description = NULL;
     $dc = DublinCore::importFromXMLString($o['DC']->content);
-    $dc = $dc->asArray();
+    if ($dc) {
+      $dc = $dc->asArray();
+      $description = $dc['dc:description']['value'];
+    }
     return array(
       'label' => $o->label,
       'class' => drupal_strtolower(preg_replace('/[^A-Za-z0-9]/', '-', $o->id)),
       'link' => l($o->label, $url, $link_options),
       'thumb' => l($img, $url, $link_options),
-      'description' => $dc['dc:description']['value'],
+      'description' => $description,
     );
   };
   $objects = array_map($map_objects, $objects);
