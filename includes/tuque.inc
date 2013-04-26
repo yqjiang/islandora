@@ -7,7 +7,7 @@
 
 $islandora_module_path = drupal_get_path('module', 'islandora');
 
-set_include_path(get_include_path() . PATH_SEPARATOR . 'sites/all/libraries/tuque' .  PATH_SEPARATOR . "$islandora_module_path/libraries/tuque/");
+set_include_path(get_include_path() . PATH_SEPARATOR . 'sites/all/libraries/tuque' . PATH_SEPARATOR . "$islandora_module_path/libraries/tuque/");
 
 // Do this until we expose these in a module or library.
 @include_once 'sites/all/libraries/tuque/implementations/fedora3/Datastream.php';
