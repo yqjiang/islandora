@@ -29,8 +29,8 @@ function drush_islandora_correct_type_hinting() {
   }
   // Only change files within modules directories and only modify php files.
   $ret = -1;
-  passthru('find . -regex ".*\.\(php\|inc\|test\|module\|install\)" -path "*/modules/*" | xargs perl -pi -e "s/(\(.*)(AbstractFedoraObject|FedoraObject|NewFedoraObject|IslandoraFedoraObject|IslandoraNewFedoraObject)( .*\))/\1AbstractObject\3/g"', $ret);
-  passthru('find . -regex ".*\.\(php\|inc\|test\|module\|install\)" -path "*/modules/*" | xargs perl -pi -e "s/(\(.*)(AbstractFedoraDatastream|AbstractExistingFedoraDatastream|FedoraDatastream|NewFedoraDatastream|FedoraDatastreamVersion|IslandoraNewFedoraDatastream|IslandoraFedoraDatastream|IslandoraFedoraDatastreamVersion)( .*\))/\1AbstractDatastream\3/g"', $ret);
+  passthru('find . -regex ".*\.\(php\|inc\|test\|module\|install\)" -path "*/modules/*" | xargs perl -pi -e "s/(AbstractFedoraObject|NewFedoraObject|FedoraObject|IslandoraFedoraObject|IslandoraNewFedoraObject)/AbstractObject/g"', $ret);
+  passthru('find . -regex ".*\.\(php\|inc\|test\|module\|install\)" -path "*/modules/*" | xargs perl -pi -e "s/(AbstractFedoraDatastream|AbstractExistingFedoraDatastream|FedoraDatastream|NewFedoraDatastream|FedoraDatastreamVersion|IslandoraNewFedoraDatastream|IslandoraFedoraDatastream|IslandoraFedoraDatastreamVersion)/AbstractDatastream/g"', $ret);
 }
 
 function drush_islandora_correct_type_hinting_validate() {
