@@ -71,6 +71,10 @@ class IslandoraTuque {
 
     if (self::exists()) {
       $this->repository = new IslandoraRepositoryDecorator(RepositoryFactory::getRepository('fedora3', new RepositoryConfig($url, $user_string, $pass_string)));
+      $this->api = $this->repository->api;
+      $this->connection = $this->api;
+      $this->connection->reuseConnection = TRUE;
+      // @note Access to cache has been removed but that's probably not a problem.
     }
   }
 

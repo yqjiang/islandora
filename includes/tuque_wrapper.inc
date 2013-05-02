@@ -35,7 +35,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR . 'sites/all/libraries/tuqu
 /**
  * Allow modules to alter an object before a mutable event occurs.
  */
-function islandora_alter_object(AbstractFedoraObject $object, array &$context) {
+function islandora_alter_object(AbstractObject $object, array &$context) {
   module_load_include('inc', 'islandora', 'includes/utilities');
   drupal_alter(islandora_build_hook_list('islandora_object', $object->models), $object, $context);
 }
@@ -43,7 +43,7 @@ function islandora_alter_object(AbstractFedoraObject $object, array &$context) {
 /**
  * Allow modules to alter a datastream before a mutable event occurs.
  */
-function islandora_alter_datastream(AbstractFedoraObject $object, AbstractDatastream $datastream, array &$context) {
+function islandora_alter_datastream(AbstractObject $object, AbstractDatastream $datastream, array &$context) {
   module_load_include('inc', 'islandora', 'includes/utilities');
   $types = array();
   foreach ($object->models as $model) {
@@ -74,15 +74,15 @@ function islandora_invoke_datastream_hooks($hook, array $models, $dsid) {
 
 class IslandoraFedoraRepository extends FedoraRepository {
   protected $queryClass = 'IslandoraRepositoryQuery';
-  protected $newObjectClass = 'IslandoraNewFedoraObject';
-  protected $objectClass = 'IslandoraFedoraObject';
+  protected $newObjectClass = 'IslandoraAbstractObject';
+  protected $objectClass = 'IslandoraAbstractObject';
 
   /**
    * Ingest the given object.
    *
    * @see FedoraRepository::ingestObject()
    */
-  public function ingestObject(NewFedoraObject &$object) {
+  public function ingestObject(AbstractObject &$object) {
     $context = array(
       'action' => 'ingest',
       'block' => FALSE,
@@ -94,7 +94,7 @@ class IslandoraFedoraRepository extends FedoraRepository {
       }
       $ret = parent::ingestObject($object);
       islandora_invoke_object_hooks(ISLANDORA_OBJECT_INGESTED_HOOK, $object->models, $object);
-      // Call the ingested datastream hooks for NewFedoraObject's after the
+      // Call the ingested datastream hooks for AbstractObject's after the
       // object had been ingested.
       foreach ($object as $dsid => $datastream) {
         islandora_invoke_datastream_hooks(ISLANDORA_DATASTREAM_INGESTED_HOOK, $object->models, $dsid, $object, $datastream);
@@ -113,21 +113,21 @@ class IslandoraFedoraRepository extends FedoraRepository {
 
 class IslandoraRepositoryQuery extends RepositoryQuery {}
 
-class IslandoraNewFedoraObject extends NewFedoraObject {
-  protected $newFedoraDatastreamClass = 'IslandoraNewFedoraDatastream';
-  protected $fedoraDatastreamClass = 'IslandoraFedoraDatastream';
+class IslandoraAbstractObject extends AbstractObject {
+  protected $newAbstractDatastreamClass = 'IslandoraAbstractDatastream';
+  protected $fedoraDatastreamClass = 'IslandoraAbstractDatastream';
   protected $fedoraRelsExtClass = 'IslandoraFedoraRelsExt';
 }
 
-class IslandoraFedoraObject extends FedoraObject {
-  protected $newFedoraDatastreamClass = 'IslandoraNewFedoraDatastream';
-  protected $fedoraDatastreamClass = 'IslandoraFedoraDatastream';
+class IslandoraAbstractObject extends AbstractObject {
+  protected $newAbstractDatastreamClass = 'IslandoraAbstractDatastream';
+  protected $fedoraDatastreamClass = 'IslandoraAbstractDatastream';
   protected $fedoraRelsExtClass = 'IslandoraFedoraRelsExt';
 
   /**
    * Ingest the given datastream.
    *
-   * @see FedoraObject::ingestDatastream()
+   * @see AbstractObject::ingestDatastream()
    */
   public function ingestDatastream(&$datastream) {
     $object = $datastream->parent;
@@ -339,19 +339,19 @@ class IslandoraFedoraApiM extends FedoraApiM {
 
 class IslandoraSimpleCache extends SimpleCache {}
 
-class IslandoraNewFedoraDatastream extends NewFedoraDatastream {
+class IslandoraAbstractDatastream extends AbstractDatastream {
   protected $fedoraRelsIntClass = 'IslandoraFedoraRelsInt';
-  protected $fedoraDatastreamVersionClass = 'IslandoraFedoraDatastreamVersion';
+  protected $fedoraDatastreamVersionClass = 'IslandoraAbstractDatastreamVersion';
 }
 
-class IslandoraFedoraDatastream extends FedoraDatastream {
+class IslandoraAbstractDatastream extends AbstractDatastream {
   protected $fedoraRelsIntClass = 'IslandoraFedoraRelsInt';
-  protected $fedoraDatastreamVersionClass = 'IslandoraFedoraDatastreamVersion';
+  protected $fedoraDatastreamVersionClass = 'IslandoraAbstractDatastreamVersion';
 }
 
-class IslandoraFedoraDatastreamVersion extends FedoraDatastreamVersion {
+class IslandoraAbstractDatastreamVersion extends AbstractDatastreamVersion {
   protected $fedoraRelsIntClass = 'IslandoraFedoraRelsInt';
-  protected $fedoraDatastreamVersionClass = 'IslandoraFedoraDatastreamVersion';
+  protected $fedoraDatastreamVersionClass = 'IslandoraAbstractDatastreamVersion';
 }
 
 class IslandoraFedoraRelsExt extends FedoraRelsExt {}

@@ -126,7 +126,7 @@ function islandora_ingest_form_get_last_step_id(array &$form_state) {
  * @param array $configuration
  *   The list of key/value pairs of configuration.
  *
- * @return NewFedoraObject
+ * @return AbstractObject
  *   The new object.
  */
 function islandora_ingest_form_prepare_new_object(array $configuration) {
@@ -723,13 +723,13 @@ function islandora_ingest_form_submit(array $form, array &$form_state) {
 }
 
 /**
- * Gets a reference to the stored NewFedoraObject's.
+ * Gets a reference to the stored AbstractObject's.
  *
  * @param array $form_state
  *   The Drupal form state.
  *
  * @return array
- *   A reference to the stored NewFedoraObjects to be ingested when the final
+ *   A reference to the stored AbstractObjects to be ingested when the final
  *   step submits.
  */
 function &islandora_ingest_form_get_objects(array &$form_state) {
@@ -737,7 +737,7 @@ function &islandora_ingest_form_get_objects(array &$form_state) {
 }
 
 /**
- * Gets a single object from the stored NewFedoraObject's.
+ * Gets a single object from the stored AbstractObject's.
  *
  * @note In our current use case we are only dealing with a single object
  *   ingest, this makes it convenient to access it. Ideally the steps
@@ -748,8 +748,8 @@ function &islandora_ingest_form_get_objects(array &$form_state) {
  * @param array $form_state
  *   The Drupal form state.
  *
- * @return NewFedoraObject
- *   Returns the 'current' object in the array of NewFedoraObjects, generally
+ * @return AbstractObject
+ *   Returns the 'current' object in the array of AbstractObjects, generally
  *   this is only used when there is one object in the list of objects.
  */
 function islandora_ingest_form_get_object(array &$form_state) {

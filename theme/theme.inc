@@ -143,7 +143,7 @@ function islandora_preprocess_islandora_object_print(array &$variables) {
   // suggestion.
   $object = $variables['object'];
   $pid = strtolower(preg_replace('/[^a-zA-Z0-9_]/', '_', $object->id));
-  $models = array_diff($object->models, array('fedora-system:FedoraObject-3.0'));
+  $models = array_diff($object->models, array('fedora-system:AbstractObject-3.0'));
   foreach ($models as $model) {
     $model = strtolower(preg_replace('/[^a-zA-Z0-9_]/', '_', $model));
     $suggestions = theme_get_suggestions(array($model, $pid), 'islandora_object_print');

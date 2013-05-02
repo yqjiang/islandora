@@ -136,8 +136,8 @@ class IslandoraHooksTestCase extends IslandoraWebTestCase {
     $_SESSION['islandora_hooks']['hook'][ISLANDORA_OBJECT_PURGED_HOOK] = FALSE;
     $_SESSION['islandora_hooks']['alter'][ISLANDORA_OBJECT_PURGED_HOOK] = FALSE;
     $object->delete();
-    $this->assert($_SESSION['islandora_hooks']['alter'][ISLANDORA_OBJECT_PURGED_HOOK], 'Called "hook_islandora_object_alter" when deleting via FedoraObject::delete.');
-    $this->assert($_SESSION['islandora_hooks']['hook'][ISLANDORA_OBJECT_PURGED_HOOK], 'Called ISLANDORA_OBJECT_PURGED_HOOK when purging via FedoraObject::delete.');
+    $this->assert($_SESSION['islandora_hooks']['alter'][ISLANDORA_OBJECT_PURGED_HOOK], 'Called "hook_islandora_object_alter" when deleting via AbstractObject::delete.');
+    $this->assert($_SESSION['islandora_hooks']['hook'][ISLANDORA_OBJECT_PURGED_HOOK], 'Called ISLANDORA_OBJECT_PURGED_HOOK when purging via AbstractObject::delete.');
     $this->repository->purgeObject($object->id);
     // Test alter blocking.
     $object = $this->repository->constructObject('test:testPurgedObjectHook');
@@ -171,8 +171,8 @@ class IslandoraHooksTestCase extends IslandoraWebTestCase {
     $_SESSION['islandora_hooks']['hook'][ISLANDORA_DATASTREAM_INGESTED_HOOK] = FALSE;
     $_SESSION['islandora_hooks']['alter'][ISLANDORA_DATASTREAM_INGESTED_HOOK] = FALSE;
     $object->ingestDatastream($ds);
-    $this->assert($_SESSION['islandora_hooks']['alter'][ISLANDORA_DATASTREAM_INGESTED_HOOK], 'Called "hook_islandora_datastream_alter" when ingesting via FedoraObject::ingestDatastream.');
-    $this->assert($_SESSION['islandora_hooks']['hook'][ISLANDORA_DATASTREAM_INGESTED_HOOK], 'Called ISLANDORA_DATASTREAM_INGESTED_HOOK when ingesting via FedoraObject::ingestDatastream.');
+    $this->assert($_SESSION['islandora_hooks']['alter'][ISLANDORA_DATASTREAM_INGESTED_HOOK], 'Called "hook_islandora_datastream_alter" when ingesting via AbstractObject::ingestDatastream.');
+    $this->assert($_SESSION['islandora_hooks']['hook'][ISLANDORA_DATASTREAM_INGESTED_HOOK], 'Called ISLANDORA_DATASTREAM_INGESTED_HOOK when ingesting via AbstractObject::ingestDatastream.');
     $this->repository->purgeObject($object->id);
     // Test modifying a datastream.
     $object = $this->repository->constructObject('test:testModifiedDatastreamHook');
@@ -205,8 +205,8 @@ class IslandoraHooksTestCase extends IslandoraWebTestCase {
     $_SESSION['islandora_hooks']['hook'][ISLANDORA_DATASTREAM_PURGED_HOOK] = FALSE;
     $_SESSION['islandora_hooks']['alter'][ISLANDORA_DATASTREAM_PURGED_HOOK] = FALSE;
     $object->purgeDatastream($ds->id);
-    $this->assert($_SESSION['islandora_hooks']['alter'][ISLANDORA_DATASTREAM_PURGED_HOOK], 'Called "hook_islandora_datastream_alter" when purging via FedoraObject::purgeDatastream.');
-    $this->assert($_SESSION['islandora_hooks']['hook'][ISLANDORA_DATASTREAM_PURGED_HOOK], 'Called ISLANDORA_DATASTREAM_PURGED_HOOK when purging via FedoraObject::purgeDatastream.');
+    $this->assert($_SESSION['islandora_hooks']['alter'][ISLANDORA_DATASTREAM_PURGED_HOOK], 'Called "hook_islandora_datastream_alter" when purging via AbstractObject::purgeDatastream.');
+    $this->assert($_SESSION['islandora_hooks']['hook'][ISLANDORA_DATASTREAM_PURGED_HOOK], 'Called ISLANDORA_DATASTREAM_PURGED_HOOK when purging via AbstractObject::purgeDatastream.');
     $this->repository->purgeObject($object->id);
   }
 

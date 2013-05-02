@@ -120,6 +120,9 @@ function islandora_is_valid_dsid($dsid) {
 function islandora_describe_repository($url = NULL) {
   $url = isset($url) ? $url : variable_get('islandora_base_url', 'http://localhost:8080/fedora');
   $connection = islandora_get_tuque_connection();
+  watchdog('islandora', print_r($connection, TRUE));
+  watchdog('islandora', print_r($connection->api, TRUE));
+  watchdog('islandora', print_r($connection->api->a, TRUE));
   if ($connection) {
     try {
       $info = $connection->api->a->describeRepository();
@@ -271,14 +274,14 @@ function islandora_namespace_accessible($id) {
  * This function gets its info from the RELS-EXT directly rather than through an
  * risearch.
  *
- * @param FedoraObject $object
+ * @param AbstractObject $object
  *   The object whose parents will be returned.
  *
  * @return array
- *   An array of FedoraObject's that the given object has a
+ *   An array of AbstractObject's that the given object has a
  *   (isMemberOf, isMemberOfCollection) relationship with.
  */
-function islandora_get_parents_from_rels_ext(FedoraObject $object) {
+function islandora_get_parents_from_rels_ext(AbstractObject $object) {
   try {
     $collections = array_merge(
       $object->relationships->get(FEDORA_RELS_EXT_URI, 'isMemberOfCollection'),
@@ -298,7 +301,7 @@ function islandora_get_parents_from_rels_ext(FedoraObject $object) {
 /**
  * Gets the datastreams requirments that are missing.
  *
- * @param FedoraObject $object
+ * @param AbstractObject $object
  *   The object which models will be used to determine what datastreams it
  *   should have.
  *
@@ -306,7 +309,7 @@ function islandora_get_parents_from_rels_ext(FedoraObject $object) {
  *   The DS-COMPOSITE-MODEL defined datastreams that are required for the given
  *   object, but not already present.
  */
-function islandora_get_missing_datastreams_requirements(FedoraObject $object) {
+function islandora_get_missing_datastreams_requirements(AbstractObject $object) {
   module_load_include('inc', 'islandora', 'includes/utilities');
   $datastreams = islandora_get_datastreams_requirements($object);
   foreach ($datastreams as $dsid => $requirements) {
@@ -331,7 +334,7 @@ function islandora_get_missing_datastreams_requirements(FedoraObject $object) {
  *
  * @see islandora_get_required_datastreams_from_content_model()
  *
- * @param FedoraObject $object
+ * @param AbstractObject $object
  *   The object which models will be used to determine what datastreams it
  *   should have.
  *
@@ -339,7 +342,7 @@ function islandora_get_missing_datastreams_requirements(FedoraObject $object) {
  *   The DS-COMPOSITE-MODEL defined datastreams that are required for the given
  *   object.
  */
-function islandora_get_datastreams_requirements(FedoraObject $object) {
+function islandora_get_datastreams_requirements(AbstractObject $object) {
   return islandora_get_datastreams_requirements_from_models($object->models);
 }
 
@@ -375,7 +378,7 @@ function islandora_get_datastreams_requirements_from_models(array $models) {
  *
  * @todo Add support for fetching the schema information.
  *
- * @param FedoraObject $object
+ * @param AbstractObject $object
  *   The content model whose DS-COMPOSITE-MODEL datastream will be used to
  *   determine what datastreams are required.
  *
@@ -388,7 +391,7 @@ function islandora_get_datastreams_requirements_from_models(array $models) {
  *     - "mime": A array containing MIME-types the stream may have.
  *     - "optional": A boolean indicating if the given stream is optional.
  */
-function islandora_get_datastreams_requirements_from_content_model(FedoraObject $object) {
+function islandora_get_datastreams_requirements_from_content_model(AbstractObject $object) {
   if (empty($object[DS_COMP_STREAM])) {
     return array();
   }
@@ -435,13 +438,13 @@ function islandora_get_datastreams_requirements_from_content_model(FedoraObject 
  *   - pid: The object for the relationship, to which we are creating the
  *     relationhsip.
  *
- * @return NewFedoraObject
- *   An ingestable NewFedoraObject.
+ * @return AbstractObject
+ *   An ingestable AbstractObject.
  */
 function islandora_prepare_new_object($namespace = NULL, $label = NULL, $datastreams = array(), $content_models = array(), $relationships = array()) {
   global $user;
   $tuque = islandora_get_tuque_connection();
-  $object = isset($namespace) ? $tuque->repository->constructObject($namespace) : new IslandoraNewFedoraObject(NULL, $tuque->repository);
+  $object = isset($namespace) ? $tuque->repository->constructObject($namespace) : new IslandoraAbstractObject(NULL, $tuque->repository);
   $object->owner = isset($user->name) ? $user->name : $object->owner;
   $object->label = isset($label) ? $label : $object->label;
   foreach ($content_models as $content_model) {
@@ -522,12 +525,8 @@ function islandora_prepare_new_object($namespace = NULL, $label = NULL, $datastr
  * is not accessible.
  */
 function islandora_display_repository_inaccessible_message() {
-  $text = t('Islandora configuration');
-  $link = l($text, 'admin/islandora/configure', array('attributes' => array('title' => $text)));
-  $message = t('Could not connect to the repository. Please check the settings on the !link page.',
-  array('!link' => $link));
-  drupal_set_message(check_plain($message), 'error', FALSE);
-
+  drupal_set_message(t('Could not connect to the repository. Please check the settings on the <a href="@url" title="Islandora configuration">Islandora configuration</a> page.',
+      array('@url' => url('admin/islandora/configure'))), 'error', FALSE);
 }
 
 /**

@@ -14,7 +14,7 @@
  * ancestry which is identified by any of the following RELS-EXT terms
  * (isMemberOf,isMemberOfCollection,isPartOf).
  *
- * @param FedoraObject $object
+ * @param AbstractObject $object
  *   An object whose ancestry will be mapped to bread-crumbs.
  *
  * @see drupal_set_breadcrumb()
@@ -75,7 +75,7 @@ function islandora_get_breadcrumbs_recursive($pid, FedoraRepository $repository,
                         )
                         and $parentObject <fedora-model:state> <info:fedora/fedora-system:def/model#Active>
                       )
-                      minus $content <mulgara:is> <info:fedora/fedora-system:FedoraObject-3.0>
+                      minus $content <mulgara:is> <info:fedora/fedora-system:AbstractObject-3.0>
                       minus $parentObject <mulgara:is> <info:fedora/' . $pid . '>
                       order by $title desc';
     $results = $repository->ri->itqlQuery($query_string);
