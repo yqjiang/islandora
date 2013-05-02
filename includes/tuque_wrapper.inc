@@ -81,7 +81,7 @@ class IslandoraFedoraRepository extends FedoraRepository {
    *
    * @see FedoraRepository::ingestObject()
    */
-  public function ingestObject(NewFedoraObject &$object) {
+  public function ingestObject(AbstractObject &$object) {
     $context = array(
       'action' => 'ingest',
       'block' => FALSE,
