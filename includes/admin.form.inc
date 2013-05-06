@@ -39,7 +39,6 @@ function islandora_repository_admin(array $form, array &$form_state) {
   catch (RepositoryException $e) {
     $info = FALSE;
   }
-
   if ($info) {
     try {
       $dc = $connection->api->m->getDatastream('fedora-system:ContentModel-3.0', 'DC');
