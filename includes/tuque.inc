@@ -70,7 +70,11 @@ class IslandoraTuque {
     }
 
     if (self::exists()) {
-      $this->repository = new IslandoraRepositoryDecorator(RepositoryFactory::getRepository('fedora3', new RepositoryConfig($url, $user_string, $pass_string)));
+      $this->repository = new IslandoraRepositoryDecorator(RepositoryFactory::getRepository('fedora4', new RepositoryConfig($url, $user_string, $pass_string)));
+      $this->api = $this->repository->api;
+      $this->connection = $this->api->connection;
+      $this->connection->reuseConnection = TRUE;
+      // Cache is no longer accessible.
     }
   }
 
@@ -96,15 +100,25 @@ class IslandoraTuque {
 }
 
 class IslandoraRepositoryDecorator extends RepositoryDecorator {
+
+  /**
+   * Construct an object.
+   */
   public function constructObject($id = NULL, $create_uuid = FALSE) {
     return new IslandoraObjectDecorator(parent::constructObject($id, $create_uuid));
   }
 
+  /**
+   * Ingest an object.
+   */
   public function ingestObject(AbstractObject &$object) {
     $object = new IslandoraObjectDecorator(parent::ingestObject($object));
     return $object;
   }
 
+  /**
+   * Fetch an object.
+   */
   public function getObject($id) {
     return new IslandoraObjectDecorator(parent::getObject($id));
   }

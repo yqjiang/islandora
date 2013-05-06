@@ -20,7 +20,7 @@ function islandora_drush_command() {
 /**
  * Drush command callback.
  *
- * Corrects the type hinting in parameters such that they only use AbstractObject.
+ * Corrects the type hinting in such that they only use AbstractObject.
  */
 function drush_islandora_correct_type_hinting() {
   drush_print(dt('This will modify source code within your Drupal site. This can not be reversed.'));
@@ -33,6 +33,9 @@ function drush_islandora_correct_type_hinting() {
   passthru('find . -regex ".*\.\(php\|inc\|test\|module\|install\)" -path "*/modules/*" | xargs perl -pi -e "s/(AbstractFedoraDatastream|AbstractExistingFedoraDatastream|FedoraDatastream|NewFedoraDatastream|FedoraDatastreamVersion|IslandoraNewFedoraDatastream|IslandoraFedoraDatastream|IslandoraFedoraDatastreamVersion)/AbstractDatastream/g"', $ret);
 }
 
+/**
+ * Prevent this command from being run on windows.
+ */
 function drush_islandora_correct_type_hinting_validate() {
   if (drush_is_windows()) {
     drush_set_error(dt("Sorry but this hasn't been implemented for Windows, it only works on unix systems."));
