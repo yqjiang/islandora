@@ -70,7 +70,9 @@ class IslandoraTuque {
     }
 
     if (self::exists()) {
-      $this->repository = new IslandoraRepositoryDecorator(RepositoryFactory::getRepository('fedora4', new RepositoryConfig($url, $user_string, $pass_string)));
+      // Temporary Hack until we get an authentication system set up.
+      $user_string = $pass_string = 'fedoraAdmin';
+      $this->repository = New IslandoraRepositoryDecorator(RepositoryFactory::getRepository('fedora4', new RepositoryConfig($url, $user_string, $pass_string)));
       $this->api = $this->repository->api;
       $this->connection = $this->api->connection;
       $this->connection->reuseConnection = TRUE;
