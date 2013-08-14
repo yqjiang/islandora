@@ -686,10 +686,10 @@ function islandora_edit_object(AbstractObject $object) {
       $output = array_merge_recursive($output, $temp);
     }
   }
-  if (empty($output)) {
+  /*if (empty($output)) {
     // Add in the default, if we did not get any results.
     $output = islandora_default_islandora_edit_object($object);
-  }
+  }*/
   arsort($output);
   drupal_alter(ISLANDORA_EDIT_HOOK, $object, $output);
   islandora_as_renderable_array($output);
@@ -741,7 +741,7 @@ function islandora_view_default_object() {
  * @return string
  *   The html repersentation of this object.
  */
-function islandora_view_object(AbstractObject $object) {
+function islandora_view_object($object) {
   module_load_include('inc', 'islandora', 'includes/breadcrumb');
   module_load_include('inc', 'islandora', 'includes/utilities');
   drupal_set_title($object->label);
@@ -760,10 +760,10 @@ function islandora_view_object(AbstractObject $object) {
       $output = array_merge_recursive($output, $temp);
     }
   }
-  if (empty($output)) {
+  /*if (empty($output)) {
     // No results, use the default view.
     $output = islandora_default_islandora_view_object($object);
-  }
+  }*/
   arsort($output);
   drupal_alter($hooks, $object, $output);
   islandora_as_renderable_array($output);
@@ -836,6 +836,7 @@ function islandora_get_tuque_connection($user = NULL, $url = NULL) {
     }
   }
   return $tuque;
+
 }
 
 /**
@@ -860,7 +861,7 @@ function islandora_object_load($object_id) {
   $tuque = islandora_get_tuque_connection();
   if ($tuque) {
     try {
-      return $tuque->repository->getObject(urldecode($object_id));
+      return $tuque->repository->getObject($object_id);
     }
     catch (Exception $e) {
       if ($e->getCode() == '404') {

@@ -9,27 +9,28 @@
  */
 
 $islandora_module_path = drupal_get_path('module', 'islandora');
-
-// @todo this until we expost these in a module or library
-@include_once 'sites/all/libraries/tuque/Datastream.php';
-@include_once 'sites/all/libraries/tuque/FedoraApi.php';
-@include_once 'sites/all/libraries/tuque/FedoraApiSerializer.php';
-@include_once 'sites/all/libraries/tuque/Object.php';
-@include_once 'sites/all/libraries/tuque/RepositoryConnection.php';
+@include_once 'sites/all/libraries/tuque/implementations/fedora3/Datastream.php';
+@include_once 'sites/all/libraries/tuque/implementations/fedora4/FedoraApi.php';
+@include_once 'sites/all/libraries/tuque/implementations/fedora4/FedoraApiSerializer.php';
+@include_once 'sites/all/libraries/tuque/implementations/fedora4/Object.php';
+@include_once 'sites/all/libraries/tuque/implementations/fedora3/RepositoryConnection.php';
 @include_once 'sites/all/libraries/tuque/Cache.php';
 @include_once 'sites/all/libraries/tuque/RepositoryException.php';
-@include_once 'sites/all/libraries/tuque/Repository.php';
-@include_once 'sites/all/libraries/tuque/FedoraRelationships.php';
+@include_once 'sites/all/libraries/tuque/implementations/fedora4/Repository.php';
+@include_once 'sites/all/libraries/tuque/implementations/fedora3/FedoraRelationships.php';
+@include_once 'sites/all/libraries/tuque/RepositoryConfigInterface.php';
 
-@include_once "$islandora_module_path/libraries/tuque/Datastream.php";
-@include_once "$islandora_module_path/libraries/tuque/FedoraApi.php";
-@include_once "$islandora_module_path/libraries/tuque/FedoraApiSerializer.php";
-@include_once "$islandora_module_path/libraries/tuque/Object.php";
-@include_once "$islandora_module_path/libraries/tuque/RepositoryConnection.php";
-@include_once "$islandora_module_path/libraries/tuque/Cache.php";
-@include_once "$islandora_module_path/libraries/tuque/RepositoryException.php";
-@include_once "$islandora_module_path/libraries/tuque/Repository.php";
-@include_once "$islandora_module_path/libraries/tuque/FedoraRelationships.php";
+
+@include_once "$islandora_module_path/implementations/fedora3/Datastream.php";
+@include_once "$islandora_module_path/implementations/fedora4/FedoraApi.php";
+@include_once "$islandora_module_path/implementations/fedora4/FedoraApiSerializer.php";
+@include_once "$islandora_module_path/implementations/fedora4/Object.php";
+@include_once "$islandora_module_path/implementations/fedora3/RepositoryConnection.php";
+@include_once "$islandora_module_path/Cache.php";
+@include_once "$islandora_module_path/RepositoryException.php";
+@include_once "$islandora_module_path/implementations/fedora4/Repository.php";
+@include_once "$islandora_module_path/implementations/fedora3/FedoraRelationships.php";
+@include_once "$islandora_module_path/RepositoryConfigInterface.php";
 
 /**
  * Allow modules to alter an object before a mutable event occurs.
@@ -156,7 +157,7 @@ class IslandoraFedoraObject extends FedoraObject {
 
 class IslandoraRepositoryConnection extends RepositoryConnection {}
 
-class IslandoraFedoraApi extends FedoraApi {
+class IslandoraFedoraApi extends Fedora4Api {
 
   /**
    * Instantiate a IslandoraFedoraApi object.
@@ -165,15 +166,15 @@ class IslandoraFedoraApi extends FedoraApi {
    */
   public function __construct(IslandoraRepositoryConnection $connection, FedoraApiSerializer $serializer = NULL) {
     if (!$serializer) {
-      $serializer = new FedoraApiSerializer();
+      $serializer = new Fedora4ApiSerializer();
     }
-    $this->a = new FedoraApiA($connection, $serializer);
-    $this->m = new IslandoraFedoraApiM($connection, $serializer);
+    $this->a = new Fedora4ApiA($connection, $serializer);
+   $this->m = new IslandoraFedoraApiM($connection, $serializer);
     $this->connection = $connection;
   }
 }
 
-class IslandoraFedoraApiM extends FedoraApiM {
+class IslandoraFedoraApiM extends Fedora4ApiM {
 
   /**
    * Update a datastream.

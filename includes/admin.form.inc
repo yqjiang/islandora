@@ -99,10 +99,10 @@ function islandora_admin_settings_form_repository_access_message($url) {
   $connection = islandora_get_tuque_connection(NULL, $url);
   if ($connection) {
     try {
-      $info = $connection->api->a->describeRepository();
+     $info = $connection->api->a->describeRepository();
       // If we are able to successfully call API-M::getDatastream, assume we are
       // an authenticated user, as API-M is usally locked down.
-      $dc = $connection->api->m->getDatastream('fedora-system:ContentModel-3.0', 'DC');
+     $dc = $connection->api->m->getDatastream('fedora-system:ContentModel-3.0', 'DC');
     }
     catch (RepositoryException $e) {
       // Ignore, we only testing to see what is accessible.
@@ -119,9 +119,9 @@ function islandora_admin_settings_form_repository_access_message($url) {
                                '!version' => $info['repositoryVersion'], '!filter' => 'Drupal Filter'));
   }
   else {
-    $confirmation_message = theme_image(array('path' => 'misc/watchdog-error.png', 'attributes' => array()));
-    $confirmation_message .= t('Unable to connect to Fedora server at !islandora_url', array(
-                               '!islandora_url' => $url));
+ //   $confirmation_message = theme_image(array('path' => 'misc/watchdog-error.png', 'attributes' => array()));
+ //   $confirmation_message .= t('Unable to connect to Fedora server at !islandora_url', array(
+ //                              '!islandora_url' => $url));
   }
   return $confirmation_message;
 }
