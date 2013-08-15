@@ -119,9 +119,9 @@ function islandora_admin_settings_form_repository_access_message($url) {
                                '!version' => $info['repositoryVersion'], '!filter' => 'Drupal Filter'));
   }
   else {
- //   $confirmation_message = theme_image(array('path' => 'misc/watchdog-error.png', 'attributes' => array()));
- //   $confirmation_message .= t('Unable to connect to Fedora server at !islandora_url', array(
- //                              '!islandora_url' => $url));
+     $confirmation_message = theme_image(array('path' => 'misc/watchdog-error.png', 'attributes' => array()));
+     $confirmation_message .= t('Unable to connect to Fedora server at !islandora_url', array(
+                              '!islandora_url' => $url));
   }
   return $confirmation_message;
 }
