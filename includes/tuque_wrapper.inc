@@ -321,7 +321,7 @@ class IslandoraFedoraApiM extends Fedora4ApiM {
           return '';
 
         default:
-          $ret = parent::purgeObject($pid, $param=array());
+          $ret = parent::purgeObject($pid, $log_message = NULL,$param=array());
           islandora_invoke_object_hooks(ISLANDORA_OBJECT_PURGED_HOOK, $models, $pid);
           return $ret;
       }
