@@ -760,10 +760,10 @@ function islandora_view_object($object) {
       $output = array_merge_recursive($output, $temp);
     }
   }
-  /*if (empty($output)) {
+  if (empty($output)) {
     // No results, use the default view.
     $output = islandora_default_islandora_view_object($object);
-  }*/
+  }
   arsort($output);
   drupal_alter($hooks, $object, $output);
   islandora_as_renderable_array($output);
